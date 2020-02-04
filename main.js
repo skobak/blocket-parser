@@ -5,7 +5,17 @@ var lastDate = '';
 const telegramAPI = '1022476304:AAEAaGiU9iLj4B5eC3bna5ngLzSPqqzceoQ';
 const chatId = '7070569';
 
+const getCurrentDate = () => {
+  var dateObj = new Date();
+  var month = dateObj.getUTCMonth() + 1; //months from 1-12
+  var day = dateObj.getUTCDate();
+  var year = dateObj.getUTCFullYear();
+
+  return day + '/' + month + '/' + year;
+};
+
 const writeToFile = data => {
+  data = getCurrentDate() + ' ' + data;
   fs.writeFile('lastDate.txt', data, err => {
     if (err) console.log(err);
     console.log('Successfully Written to File.');
@@ -24,8 +34,9 @@ async function readFile() {
 }
 
 const isNew = time => {
-  const time1Date = new Date('01/01/2000 ' + time);
-  const time2Date = new Date('01/01/2000 ' + lastDate);
+  const date = getCurrentDate();
+  const time1Date = new Date(date + ' ' + time);
+  const time2Date = new Date(lastDate);
   if (time1Date > time2Date) {
     return true;
   }
