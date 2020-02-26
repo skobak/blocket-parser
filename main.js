@@ -11,7 +11,7 @@ const getCurrentDate = () => {
   var day = dateObj.getUTCDate();
   var year = dateObj.getUTCFullYear();
 
-  return day + '/' + month + '/' + year;
+  return year + '-' + month + '-' + day;
 };
 
 const writeToFile = data => {
