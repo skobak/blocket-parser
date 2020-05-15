@@ -3,7 +3,9 @@ var fs = require('fs');
 const TelegramBot = require('node-telegram-bot-api');
 var lastDate = '';
 const telegramAPI = '1022476304:AAEAaGiU9iLj4B5eC3bna5ngLzSPqqzceoQ';
-const chatId = '7070569';
+// const chatId = '7070569';
+// const chatId = '20895702';
+const chatId = '1170086230';
 
 const getCurrentDate = () => {
   var dateObj = new Date();
@@ -14,9 +16,9 @@ const getCurrentDate = () => {
   return year + '-' + month + '-' + day;
 };
 
-const writeToFile = data => {
+const writeToFile = (data) => {
   data = getCurrentDate() + ' ' + data;
-  fs.writeFile('lastDate.txt', data, err => {
+  fs.writeFile('lastDate.txt', data, (err) => {
     if (err) console.log(err);
     console.log('Successfully Written to File.');
   });
@@ -24,7 +26,7 @@ const writeToFile = data => {
 
 async function readFile() {
   return new Promise((resolve, reject) => {
-    fs.readFile('lastDate.txt', 'utf8', function(err, data) {
+    fs.readFile('lastDate.txt', 'utf8', function (err, data) {
       if (err) {
         reject(err);
       }
@@ -33,7 +35,7 @@ async function readFile() {
   });
 }
 
-const isNew = time => {
+const isNew = (time) => {
   const date = getCurrentDate();
   const time1Date = new Date(date + ' ' + time);
   const time2Date = new Date(lastDate);
@@ -43,7 +45,7 @@ const isNew = time => {
   return false;
 };
 
-const notifyMe = data => {
+const notifyMe = (data) => {
   let text = '';
   text += `${data.name}
   ${data.timeText}
@@ -54,7 +56,7 @@ const notifyMe = data => {
   `;
   // Notify both founder from Telegram
   const bot = new TelegramBot(telegramAPI, {
-    polling: false
+    polling: false,
   });
   bot.sendMessage(chatId, `🏡 New post: ${text}`);
   return true;
@@ -62,7 +64,7 @@ const notifyMe = data => {
 var c = new Crawler({
   maxConnections: 10,
   // This will be called for each crawled page
-  callback: function(error, res, done) {
+  callback: function (error, res, done) {
     if (error) {
       console.log(error);
     } else {
@@ -74,6 +76,8 @@ var c = new Crawler({
 
         for (let index = todaysArticles.length - 1; index >= 0; index--) {
           const element = todaysArticles[index];
+
+          console.log(element.children[1].children[2].children[0].children[0]);
           let price;
           let apartmentType;
           let size;
@@ -83,20 +87,22 @@ var c = new Crawler({
           let time;
           try {
             price =
-              element.children[1].children[3].children[0].children[0]
-                .children[0].children[0].data;
+              element.children[1].children[2].children[0].childNodes[0]
+                .children[1].children[0].data;
             apartmentType =
-              element.children[1].children[2].children[0].children[0]
-                .children[0].data;
+              element.children[1].children[2].children[0].childNodes[0]
+                .children[0].children[0].data;
             size =
-              element.children[1].children[2].children[0].children[2]
-                .children[0].data;
+              element.children[1].children[2].children[0].childNodes[0]
+                .children[2].children[0].data;
+
             timeText =
               element.children[1].children[0].children[2].children[0].data;
             name =
               element.children[1].children[1].children[0].children[0]
                 .children[0].childNodes[0].data;
             link =
+              'https://www.blocket.se' +
               element.children[1].children[1].children[0].children[0].attribs
                 .href;
 
@@ -124,12 +130,12 @@ var c = new Crawler({
       }
       done();
     }
-  }
+  },
 });
 
 async function runCode() {
   c.queue(
-    'https://www.blocket.se/annonser/stockholm/bostad/lagenheter?cg=3020&mre=10000&r=11&roe=3&ros=1&se=3&ss=0&st=u'
+    'https://www.blocket.se/annonser/stockholm/bostad/lagenheter?cg=3020&mre=25000&r=11&roe=10&ros=5&se=11&ss=5&st=u'
   );
   lastDate = await readFile();
   console.log(lastDate);
@@ -137,3 +143,10 @@ async function runCode() {
 }
 // Queue just one URL, with default callback
 runCode();
+
+const bot = new TelegramBot(telegramAPI, {
+  polling: false,
+});
+bot.getUpdates().then((res) => {
+  console.dir(res[0].message.chat);
+});
