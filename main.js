@@ -77,15 +77,26 @@ var c = new Crawler({
         for (let index = todaysArticles.length - 1; index >= 0; index--) {
           const element = todaysArticles[index];
 
-          console.log(element.children[1].children[2].children[0].children[0]);
           let price;
           let apartmentType;
           let size;
+          let city;
           let timeText;
           let name;
           let link;
           let time;
           try {
+            city =
+              element.children[1].children[0].children[1].children[2]
+                .children[0].data;
+
+            console.log('City: ' + city);
+            if (city !== 'Stockholms stad') {
+              console.log('skip...');
+              continue;
+            }
+
+            console.log('Stockholm - ok');
             price =
               element.children[1].children[2].children[0].childNodes[0]
                 .children[1].children[0].data;
@@ -101,6 +112,12 @@ var c = new Crawler({
             name =
               element.children[1].children[1].children[0].children[0]
                 .children[0].childNodes[0].data;
+
+            if (!name.includes('Stockholm')) {
+              console.log('skip.. because no Stockholm in name.');
+              continue;
+            }
+
             link =
               'https://www.blocket.se' +
               element.children[1].children[1].children[0].children[0].attribs
