@@ -1,0 +1,32 @@
+{
+  "name": "blocket-crawler",
+  "version": "1.0.0",
+  "description": "Blocket.se crawler and telegram bot notification",
+  "main": "main.js",
+  "dependencies": {
+    "crawler": "^1.2.1",
+    "fs": "0.0.1-security",
+    "node-telegram-bot-api": "^0.40.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/skobak1/blocketgrabber.git"
+  },
+  "keywords": [
+    "bot",
+    "blocket",
+    "telegram",
+    "crawler",
+    "parser"
+  ],
+  "author": "Aleksandr Skobeltcyn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/skobak1/blocketgrabber/issues"
+  },
+  "homepage": "https://gitlab.com/skobak1/blocketgrabber#readme"
+}
